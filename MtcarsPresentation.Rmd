@@ -1,0 +1,89 @@
+---
+title: "Mtcars Application and presentation"
+author: "Daniel Aklilu"
+date: "2025-09-07"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+## Slide 1: Load Dataset
+
+```{r , echo = TRUE, warning=FALSE}
+library(shiny)
+library(ggplot2)
+head(mtcars)
+
+```
+
+## Slide 2: App Features-
+Select between the four whether you want mpg
+,hp, wt, or disp. The User interface allows
+you to pick between one of them. 
+
+```{r}
+# In the UI: select one of the variables
+selectInput("var","Choose one:", choices = c("mpg","hp","wt","disp"))
+           
+           
+
+```
+
+## Slide 3 Explaining the code:
+This code takes the variable chosen by the user from the mtcars dataset
+and stores it in x. U then generates a histogram bins using the chosen slider
+valus and draws the histogram with labels and a title. Finally, it calculates
+and shows the summary statitics.
+```{r, eval =FALSE,echo =TRUE, error=FALSE}
+# In server: computes stats for the selected variables
+  x <- mtcars[[input$var]]
+        bins <- seq(min(x, na.rm = TRUE),
+                    max(x, na.rm = TRUE),
+                    length.out = input$bins + 1)
+
+        # draw the histogram with the specified number of bins
+        hist(x, breaks = bins, col = 'blue', border = 'white',
+             xlab = input$var,
+             main = input$var)
+        # outputs the mean, sd, and other variables
+                         paste("Variable:", input$var,
+                                "| n =", length(x),
+                                "| mean =", round(mean(x), 2),
+                                "| sd =", round(sd(x), 2))
+```
+
+
+## Slide 4 Histogram of mtcars:
+```{r}
+vars <- c("mpg", "hp", "wt", "disp")
+
+for (i in vars){
+  print( ggplot(mtcars, aes_string(x = i))+
+           geom_histogram(fill = "steelblue", color = "white", bins = 10)+ 
+           labs(title=paste("Histogram of", i), x=i, y = "Count"))
+}
+
+```
+
+## Slide 5 Conclusion:
+This app allows users to explore the mtcars dataset
+interactively by selecting variables and adjusting the
+numbers of bins to their distribution. Here is a link to 
+the mtcars site so you can check it out for your self.
+```{r,echo=FALSE, results='asis'}
+cat("Click here to view the live app: https://m5ov0p-daniel-aklilu.shinyapps.io/project-12/")
+
+
+```
+
+
+
+
+
+
